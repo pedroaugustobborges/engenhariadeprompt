@@ -1,256 +1,3116 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Oficina de Engenharia de Prompts</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .slide {
+        width: 100%;
+        max-width: 1920px;
+        margin: 0 auto;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0a2a4e 0%, #1a3a5e 100%);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 100px;
+        padding: 80px 80px 120px 80px;
+        font-family: "Inter", sans-serif;
+        overflow-y: auto;
+      }
+
+      .slide.hidden {
+        display: none;
+      }
+
+      /* Banner principal (slide 0) */
+      .banner {
+        width: 100%;
+        max-width: 1920px;
+        margin: 0 auto;
+        height: 100vh;
+        background: linear-gradient(135deg, #0a2a4e 0%, #1a3a5e 100%);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 100px;
+        padding: 80px;
+        font-family: "Inter", sans-serif;
+        overflow: hidden;
+      }
+
+      /* Elementos gráficos de fundo */
+      .neural-network {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.1;
+        z-index: 1;
+      }
+
+      .content-area {
+        flex: 1;
+        max-width: 60%;
+        z-index: 3;
+        color: white;
+      }
+
+      .photo-area {
+        flex: 0 0 380px;
+        z-index: 3;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .photo-container {
+        text-align: center;
+      }
+
+      .profile-photo {
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        border: 6px solid #50e3c2;
+        box-shadow: 0 20px 40px rgba(80, 227, 194, 0.3);
+        object-fit: cover;
+        background: #ccc;
+      }
+
+      .main-title {
+        font-size: 64px;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 20px;
+        line-height: 1.1;
+      }
+
+      .subtitle {
+        font-size: 32px;
+        font-weight: 400;
+        color: #f0f0f0;
+        margin-bottom: 30px;
+        line-height: 1.3;
+      }
+
+      .instructor-info {
+        font-size: 24px;
+        color: #50e3c2;
+        margin-bottom: 40px;
+        font-weight: 600;
+      }
+
+      .event-details {
+        display: flex;
+        gap: 40px;
+        margin-bottom: 40px;
+        align-items: center;
+      }
+
+      .detail-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px 30px;
+        border-radius: 12px;
+        border: 1px solid rgba(80, 227, 194, 0.3);
+      }
+
+      .detail-label {
+        font-size: 14px;
+        color: #f0f0f0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+      }
+
+      .detail-value {
+        font-size: 22px;
+        color: #ffffff;
+        font-weight: 600;
+      }
+
+      .cta-button {
+        background: linear-gradient(135deg, #ff6b00, #ff7f1a);
+        color: white;
+        padding: 20px 40px;
+        border: none;
+        border-radius: 12px;
+        font-size: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(255, 107, 0, 0.3);
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(255, 107, 0, 0.4);
+      }
+
+      /* Elementos decorativos abstratos */
+      .abstract-element {
+        position: absolute;
+        z-index: 2;
+      }
+
+      .element-1 {
+        top: 10%;
+        right: 15%;
+        width: 200px;
+        height: 200px;
+        background: linear-gradient(
+          45deg,
+          rgba(80, 227, 194, 0.1),
+          transparent
+        );
+        border-radius: 50%;
+        border: 2px solid rgba(80, 227, 194, 0.2);
+      }
+
+      .element-2 {
+        bottom: 15%;
+        left: 10%;
+        width: 150px;
+        height: 150px;
+        background: linear-gradient(45deg, rgba(255, 107, 0, 0.1), transparent);
+        border-radius: 20px;
+        border: 2px solid rgba(255, 107, 0, 0.2);
+        transform: rotate(45deg);
+      }
+
+      .code-lines {
+        position: absolute;
+        top: 20%;
+        left: 5%;
+        opacity: 0.05;
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+        color: #50e3c2;
+        transform: rotate(-10deg);
+      }
+
+      /* Estilos para slides de conteúdo */
+      .slide-content {
+        width: 100%;
+        max-width: 1200px;
+        text-align: center;
+        color: white;
+        z-index: 3;
+      }
+
+      .slide-title {
+        font-size: 56px;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 40px;
+        line-height: 1.2;
+      }
+
+      .slide-text {
+        font-size: 24px;
+        color: #f0f0f0;
+        line-height: 1.6;
+        margin-bottom: 40px;
+        text-align: left;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      #slide-3 .slide-text {
+        text-align: center;
+      }
+
+      .navigation {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 20px;
+        z-index: 1000;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .navigation.show {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .navigation.hidden {
+        display: none;
+      }
+
+      .nav-btn {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid rgba(80, 227, 194, 0.5);
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-btn:hover:not(:disabled) {
+        background: rgba(80, 227, 194, 0.3);
+        border-color: #50e3c2;
+      }
+
+      .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .slide-counter {
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 80px;
+      }
+
+      /* Timeline para história da IA */
+      .timeline {
+        position: relative;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding-bottom: 40px;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, #50e3c2, #ff6b00);
+        transform: translateX(-50%);
+      }
+
+      .timeline-item {
+        position: relative;
+        margin-bottom: 40px;
+        width: 45%;
+      }
+
+      .timeline-item:nth-child(odd) {
+        left: 0;
+      }
+
+      .timeline-item:nth-child(even) {
+        left: 55%;
+      }
+
+      .timeline-content {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(80, 227, 194, 0.3);
+        position: relative;
+      }
+
+      .timeline-year {
+        font-size: 18px;
+        font-weight: 700;
+        color: #50e3c2;
+        margin-bottom: 10px;
+      }
+
+      .timeline-event {
+        font-size: 16px;
+        color: #f0f0f0;
+        line-height: 1.4;
+      }
+
+      .timeline-dot {
+        position: absolute;
+        top: 20px;
+        width: 16px;
+        height: 16px;
+        background: #50e3c2;
+        border-radius: 50%;
+        border: 4px solid #0a2a4e;
+      }
+
+      .timeline-item:nth-child(odd) .timeline-dot {
+        right: -58px;
+      }
+
+      .timeline-item:nth-child(even) .timeline-dot {
+        left: -58px;
+      }
+
+      /* Estilos para slide 4 - Questão sobre IA */
+      .question-slide {
+        text-align: center;
+        color: white;
+        z-index: 3;
+        width: 100%;
+        max-width: 1200px;
+      }
+
+      .big-question {
+        font-size: 72px;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 80px;
+        line-height: 1.2;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .clickable-element {
+        background: linear-gradient(135deg, #50e3c2, #3dd6b5);
+        color: #0a2a4e;
+        padding: 30px 50px;
+        border: none;
+        border-radius: 20px;
+        font-size: 24px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.4s ease;
+        box-shadow: 0 15px 35px rgba(80, 227, 194, 0.4);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .clickable-element::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: left 0.6s ease;
+      }
+
+      .clickable-element:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 20px 50px rgba(80, 227, 194, 0.6);
+      }
+
+      .clickable-element:hover::before {
+        left: 100%;
+      }
+
+      .clickable-element:active {
+        transform: translateY(-2px) scale(1.02);
+      }
+
+      .hidden-question {
+        font-size: 48px;
+        font-weight: 600;
+        color: #50e3c2;
+        margin-top: 60px;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease;
+        line-height: 1.3;
+      }
+
+      .hidden-question.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .question-emoji {
+        font-size: 40px;
+        margin-right: 15px;
+        display: inline-block;
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-10px);
+        }
+        60% {
+          transform: translateY(-5px);
+        }
+      }
+
+      /* Modal para Alan Turing */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .modal-overlay.show {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .modal-content {
+        background: linear-gradient(135deg, #1a3a5e 0%, #0a2a4e 100%);
+        border-radius: 20px;
+        border: 2px solid rgba(80, 227, 194, 0.3);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow: hidden;
+        position: relative;
+        transform: scale(0.8) translateY(50px);
+        transition: transform 0.3s ease;
+      }
+
+      .modal-overlay.show .modal-content {
+        transform: scale(1) translateY(0);
+      }
+
+      .modal-header {
+        position: relative;
+        padding: 0;
+      }
+
+      .modal-image {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+
+      .modal-close:hover {
+        background: rgba(255, 107, 0, 0.8);
+        transform: scale(1.1);
+      }
+
+      .modal-body {
+        padding: 30px;
+        color: white;
+        text-align: center;
+      }
+
+      .modal-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #50e3c2;
+        margin-bottom: 15px;
+        line-height: 1.2;
+      }
+
+      .modal-description {
+        font-size: 16px;
+        color: #f0f0f0;
+        line-height: 1.6;
+        margin-bottom: 25px;
+      }
+
+      .modal-video-btn {
+        background: linear-gradient(135deg, #ff6b00, #ff7f1a);
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(255, 107, 0, 0.3);
+      }
+
+      .modal-video-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(255, 107, 0, 0.4);
+      }
+
+      .video-icon {
+        font-size: 18px;
+      }
+
+      /* Tornar o item clicável */
+      .timeline-item.clickable {
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      .timeline-item.clickable:hover {
+        transform: scale(1.02);
+      }
+
+      .timeline-item.clickable .timeline-content {
+        transition: all 0.2s ease;
+      }
+
+      .timeline-item.clickable:hover .timeline-content {
+        border-color: rgba(80, 227, 194, 0.6);
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      /* Estilo para "autocomplete tunado" */
+      .fast-furious-style {
+        font-family: "Russo One", sans-serif;
+        text-transform: uppercase;
+        color: #ff7f1a;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Container para a caixa de prompt */
+      .prompt-container {
+        position: relative;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 12px;
+        border: 1px solid rgba(80, 227, 194, 0.3);
+        padding: 25px;
+        margin-top: 40px;
+        text-align: left;
+        font-family: "Courier New", monospace;
+      }
+
+      .prompt-container pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        margin: 0;
+        padding-right: 80px; /* Espaço para o botão */
+        color: #f0f0f0;
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      /* Botão de copiar */
+      .copy-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #50e3c2;
+        color: #0a2a4e;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s ease;
+      }
+
+      .copy-btn:hover {
+        background: #ff6b00;
+        color: white;
+      }
+
+      /* Estilos para Slide 8 */
+      .emoji-container {
+        margin-top: 60px;
+        display: flex;
+        justify-content: center;
+        gap: 80px;
+        align-items: center;
+      }
+
+      .large-emoji {
+        font-size: 150px;
+        text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        animation: float 4s ease-in-out infinite;
+      }
+
+      .large-emoji:last-child {
+        animation-delay: 1s;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      /* Responsividade */
+      @media (max-width: 1200px) {
+        .modal-content {
+          max-width: 90%;
+          margin: 20px;
         }
 
-        .banner {
-            width: 100%;
-            max-width: 1920px; /* ✅ Prevents getting too wide */
-            margin: 0 auto; /* ✅ Centers the banner on screens > 1920px */
-            height: 1080px;
-            background: linear-gradient(135deg, #0A2A4E 0%, #1a3a5e 100%);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center; /* ✅ Changed from space-between */
-            gap: 100px; /* ✅ Added to control spacing */
-            padding: 80px;
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
+        .modal-image {
+          height: 250px;
         }
 
-        /* Elementos gráficos de fundo */
-        .neural-network {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.1;
-            z-index: 1;
+        .modal-body {
+          padding: 20px;
+        }
+
+        .modal-title {
+          font-size: 24px;
+        }
+
+        .modal-description {
+          font-size: 14px;
+        }
+
+        .modal-video-btn {
+          padding: 12px 24px;
+          font-size: 14px;
+        }
+
+        .banner,
+        .slide {
+          height: auto;
+          min-height: 100vh;
+          padding: 40px 40px 120px 40px;
+          flex-direction: column;
+          gap: 40px;
         }
 
         .content-area {
-            flex: 1;
-            max-width: 60%;
-            z-index: 3;
-            color: white;
-        }
-
-        .photo-area {
-            flex: 0 0 380px;
-            z-index: 3;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .photo-container {
-            text-align: center;
-        }
-
-        .profile-photo {
-            width: 320px;
-            height: 320px;
-            border-radius: 50%;
-            border: 6px solid #50E3C2;
-            box-shadow: 0 20px 40px rgba(80, 227, 194, 0.3);
-            object-fit: cover;
-        }
-
-
-        .main-title {
-            font-size: 64px;
-            font-weight: 700;
-            color: #FFFFFF;
-            margin-bottom: 20px;
-            line-height: 1.1;
-        }
-
-        .subtitle {
-            font-size: 32px;
-            font-weight: 400;
-            color: #F0F0F0;
-            margin-bottom: 30px;
-            line-height: 1.3;
-        }
-
-        .instructor-info {
-            font-size: 24px;
-            color: #50E3C2;
-            margin-bottom: 40px;
-            font-weight: 600;
+          max-width: 100%;
+          text-align: center;
         }
 
         .event-details {
-            display: flex;
-            gap: 40px;
-            margin-bottom: 40px;
-            align-items: center;
+          justify-content: center;
+          flex-wrap: wrap;
         }
 
-        .detail-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px 30px;
-            border-radius: 12px;
-            border: 1px solid rgba(80, 227, 194, 0.3);
+        .main-title,
+        .slide-title,
+        .big-question {
+          font-size: 48px;
         }
 
-        .detail-label {
-            font-size: 14px;
-            color: #F0F0F0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
+        .subtitle {
+          font-size: 24px;
         }
 
-        .detail-value {
-            font-size: 22px;
-            color: #FFFFFF;
-            font-weight: 600;
+        .profile-photo {
+          width: 250px;
+          height: 250px;
         }
 
-        .cta-button {
-            background: linear-gradient(135deg, #FF6B00, #ff7f1a);
-            color: white;
-            padding: 20px 40px;
-            border: none;
-            border-radius: 12px;
-            font-size: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(255, 107, 0, 0.3);
+        .timeline-item {
+          width: 100%;
+          left: 0 !important;
+          margin-left: 30px;
         }
 
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(255, 107, 0, 0.4);
+        .timeline::before {
+          left: 15px;
         }
 
-        /* Elementos decorativos abstratos */
-        .abstract-element {
-            position: absolute;
-            z-index: 2;
+        .timeline-item .timeline-dot {
+          left: -23px !important;
         }
 
-        .element-1 {
-            top: 10%;
-            right: 15%;
-            width: 200px;
-            height: 200px;
-            background: linear-gradient(45deg, rgba(80, 227, 194, 0.1), transparent);
-            border-radius: 50%;
-            border: 2px solid rgba(80, 227, 194, 0.2);
+        .navigation {
+          bottom: 20px;
+          padding: 0 20px;
+          width: calc(100% - 40px);
+          max-width: 500px;
+          justify-content: space-between;
         }
 
-        .element-2 {
-            bottom: 15%;
-            left: 10%;
-            width: 150px;
-            height: 150px;
-            background: linear-gradient(45deg, rgba(255, 107, 0, 0.1), transparent);
-            border-radius: 20px;
-            border: 2px solid rgba(255, 107, 0, 0.2);
-            transform: rotate(45deg);
+        .nav-btn {
+          flex: 1;
+          padding: 10px 16px;
+          font-size: 14px;
+          max-width: 120px;
         }
 
-        .code-lines {
-            position: absolute;
-            top: 20%;
-            left: 5%;
-            opacity: 0.05;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: #50E3C2;
-            transform: rotate(-10deg);
+        .slide-counter {
+          margin: 0 10px;
+          min-width: 60px;
+          font-size: 12px;
         }
 
-        /* Responsividade básica para visualização */
-        @media (max-width: 1200px) {
-            .banner {
-                /* Using height auto to be more flexible */
-                height: auto;
-                min-height: 600px;
-                padding: 40px;
-                flex-direction: column; /* Stack elements on smaller screens */
-                gap: 40px; /* Adjust gap for vertical layout */
-            }
-            
-            .content-area {
-                max-width: 100%; /* Allow content to take full width */
-                text-align: center; /* Center text */
-            }
-
-            .event-details {
-                justify-content: center; /* Center details */
-            }
-
-            .main-title {
-                font-size: 48px;
-            }
-            
-            .subtitle {
-                font-size: 24px;
-            }
-            
-            .profile-photo {
-                width: 250px;
-                height: 250px;
-            }
+        .clickable-element {
+          font-size: 20px;
+          padding: 25px 40px;
         }
+
+        .hidden-question {
+          font-size: 36px;
+        }
+
+        .large-emoji {
+          font-size: 100px;
+        }
+      }
     </style>
-</head>
-<body>
-    <div class="banner">
-        <div class="code-lines">
-            function generatePrompt(context) {<br>
-            &nbsp;&nbsp;return optimize(context);<br>
-            }<br><br>
-            AI.enhance(creativity);
-        </div>
-        
-        <div class="abstract-element element-1"></div>
-        <div class="abstract-element element-2"></div>
-        
-        <div class="content-area">
-            <h1 class="main-title">Oficina de<br>Engenharia de<br>Prompts</h1>
-            <h2 class="subtitle">Otimize a utilização de IA generativa para tarefas diárias e entregue melhores produtos</h2>
-            <div class="instructor-info">com Pedro Borges</div>
-            
-            <div class="event-details">
-                <div class="detail-item">
-                    <div class="detail-label">Data</div>
-                    <div class="detail-value">21/08</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Horário</div>
-                    <div class="detail-value">19:30</div>
-                </div>
-            </div>
-            
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfkohFN50mGKGXpBlG4uAQZPynNCrNP9KfACoJPCYFgM2VGLA/viewform?fbzx=7071072669710924710" class="cta-button" target="_blank">
-                Inscreva-se
-            </a>
-        </div>
-        
-        <div class="photo-area">
-            <div class="photo-container">
-                <img src="my_photo.png" alt="Foto do Instrutor Pedro Borges" class="profile-photo">
+  </head>
+  <body>
+    <div id="slide-0" class="slide">
+      <div class="code-lines">
+        function generatePrompt(context) {<br />
+        &nbsp;&nbsp;return optimize(context);<br />
+        }<br /><br />
+        AI.enhance(creativity);
+      </div>
 
-            </div>
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+
+      <div class="content-area">
+        <h1 class="main-title">Oficina de<br />Engenharia de<br />Prompts</h1>
+        <h2 class="subtitle">
+          Otimize a utilização de IA generativa para tarefas diárias e entregue
+          melhores produtos
+        </h2>
+        <div class="instructor-info">com Pedro Borges</div>
+
+        <div class="event-details">
+          <div class="detail-item">
+            <div class="detail-label">Data</div>
+            <div class="detail-value">21/08</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Horário</div>
+            <div class="detail-value">19:30</div>
+          </div>
         </div>
+
+        <button class="cta-button" onclick="nextSlide()">Começar</button>
+      </div>
+
+      <div class="photo-area">
+        <div class="photo-container">
+          <img
+            src="my_photo.png"
+            alt="Foto do Instrutor Pedro Borges"
+            class="profile-photo"
+          />
+        </div>
+      </div>
     </div>
-</body>
+
+    <div id="slide-1" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+
+      <div class="slide-content">
+        <h1 class="slide-title">O que é um Prompt?</h1>
+        <div class="slide-text">
+          <p style="margin-bottom: 30px">
+            Um <strong style="color: #50e3c2">prompt</strong> é uma instrução ou
+            conjunto de instruções dadas a um sistema de Inteligência Artificial
+            para guiar sua resposta ou comportamento.
+          </p>
+
+          <p style="margin-bottom: 30px">
+            Um iniciador de conversa que diz à IA o que você quer que ela faça,
+            como você quer que ela responda e em que formato ou estilo.
+          </p>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.1);
+              padding: 30px;
+              border-radius: 12px;
+              border-left: 4px solid #50e3c2;
+              margin: 30px 0;
+            "
+          >
+            <h3 style="color: #50e3c2; margin-bottom: 15px; font-size: 20px">
+              Exemplo:
+            </h3>
+            <p style="font-style: italic; color: #f0f0f0">
+              "Atue como um especialista em marketing digital e crie um plano de
+              conteúdo para redes sociais para uma padaria local, focando em
+              engajamento e vendas."
+            </p>
+          </div>
+
+          <p>
+            A qualidade do prompt determina diretamente a qualidade da resposta
+            que você receberá da IA.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="slide-2" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+
+      <div class="slide-content">
+        <h1 class="slide-title">História da Inteligência Artificial</h1>
+
+        <div class="timeline">
+          <div class="timeline-item clickable" onclick="openTuringModal()">
+            <div class="timeline-content">
+              <div class="timeline-year">1950</div>
+              <div class="timeline-event">
+                Alan Turing propõe o "Teste de Turing" - marco inicial da IA
+              </div>
+            </div>
+            <div class="timeline-dot"></div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-year">1956</div>
+              <div class="timeline-event">
+                Conferência de Dartmouth - termo "Inteligência Artificial" é
+                criado
+              </div>
+            </div>
+            <div class="timeline-dot"></div>
+          </div>
+
+          <div class="timeline-item clickable" onclick="openKasparovModal()">
+            <div class="timeline-content">
+              <div class="timeline-year">1997</div>
+              <div class="timeline-event">
+                Deep Blue da IBM vence Garry Kasparov no xadrez
+              </div>
+            </div>
+            <div class="timeline-dot"></div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-year">2012</div>
+              <div class="timeline-event">
+                Revolução do Deep Learning com redes neurais multicamadas
+              </div>
+            </div>
+            <div class="timeline-dot"></div>
+          </div>
+
+          <div class="timeline-item clickable" onclick="openTransformerModal()">
+            <div class="timeline-content">
+              <div class="timeline-year">2017</div>
+              <div class="timeline-event">
+                Arquitetura Transformer revoluciona o processamento de linguagem
+              </div>
+            </div>
+            <div class="timeline-dot"></div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-year">2022</div>
+              <div class="timeline-event">
+                ChatGPT é lançado, democratizando o acesso à IA generativa
+              </div>
+            </div>
+            <div class="timeline-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="slide-3" class="slide hidden">
+      <div class="slide-content">
+        <h1 class="slide-title">Engenharia de Prompt</h1>
+        <div class="slide-text">
+          <p>Não é uma profissão. É uma habilidade.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="slide-11" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+      <div class="slide-content">
+        <h1 class="slide-title">Neurônio Natural</h1>
+        <div style="text-align: center; margin-top: 40px">
+          <img
+            src="neuronio.jpg"
+            alt="Representação de um neurônio natural"
+            style="
+              max-width: 70%;
+              height: auto;
+              border-radius: 15px;
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            "
+          />
+        </div>
+      </div>
+    </div>
+
+    <div id="slide-22" class="slide hidden">
+      <div
+        class="slide-content"
+        style="position: relative; z-index: 2; text-align: center"
+      >
+        <h1
+          class="slide-title"
+          style="
+            font-size: 100px;
+            color: #f0f0f0;
+            text-shadow: 0 0 25px rgba(80, 227, 194, 0.6);
+            margin-bottom: 20px;
+          "
+        >
+          Obrigado!
+        </h1>
+        <h2
+          class="subtitle"
+          style="
+            font-size: 24px;
+            color: #ccc;
+            font-weight: 300;
+            margin-bottom: 40px;
+          "
+        ></h2>
+        <div class="contact-info" style="font-size: 20px; color: #50e3c2">
+          Pedro Borges
+        </div>
+      </div>
+
+      <div
+        class="thematic-background"
+        style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          z-index: 1;
+        "
+      >
+        <svg
+          width="100%"
+          height="100%"
+          style="position: absolute; top: 0; left: 0"
+        >
+          <defs>
+            <filter id="glow-effect">
+              <feGaussianBlur
+                stdDeviation="2.5"
+                result="coloredBlur"
+              ></feGaussianBlur>
+              <feMerge>
+                <feMergeNode in="coloredBlur"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+              </feMerge>
+            </filter>
+          </defs>
+          <g id="lines-group" filter="url(#glow-effect)"></g>
+        </svg>
+      </div>
+
+      <script>
+        // Script para o fundo animado
+        const svg = document.querySelector(
+          "#slide-22 .thematic-background svg"
+        );
+        const linesGroup = document.getElementById("lines-group");
+        const numLines = 50;
+        const lines = [];
+
+        for (let i = 0; i < numLines; i++) {
+          const line = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line"
+          );
+          line.setAttribute("stroke", "rgba(80, 227, 194, 0.4)");
+          line.setAttribute("stroke-width", Math.random() * 1.5 + 0.5);
+          linesGroup.appendChild(line);
+          lines.push({
+            el: line,
+            x1: Math.random() * window.innerWidth,
+            y1: Math.random() * window.innerHeight,
+            x2: Math.random() * window.innerWidth,
+            y2: Math.random() * window.innerHeight,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+          });
+        }
+
+        function animateLines() {
+          lines.forEach((line) => {
+            line.x1 += line.vx;
+            line.y1 += line.vy;
+            line.x2 += line.vx;
+            line.y2 += line.vy;
+
+            if (line.x1 < 0 || line.x1 > window.innerWidth) line.vx *= -1;
+            if (line.y1 < 0 || line.y1 > window.innerHeight) line.vy *= -1;
+
+            line.el.setAttribute("x1", line.x1);
+            line.el.setAttribute("y1", line.y1);
+            line.el.setAttribute("x2", line.x2);
+            line.el.setAttribute("y2", line.y2);
+          });
+          requestAnimationFrame(animateLines);
+        }
+        animateLines();
+      </script>
+    </div>
+
+    <div id="slide-12" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+
+      <div class="slide-content">
+        <h1 class="slide-title">Replicando um BPMN</h1>
+        <h2
+          class="subtitle"
+          style="
+            font-size: 24px;
+            color: #f0f0f0;
+            margin-top: -10px;
+            margin-bottom: 40px;
+            font-weight: 400;
+          "
+        >
+          Exemplo Prático
+        </h2>
+
+        <div
+          class="two-column-layout"
+          style="
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: left;
+          "
+        >
+          <div
+            class="image-column"
+            style="flex: 1; min-width: 400px; padding-top: 20px"
+          >
+            <img
+              src="bpmn.jpg"
+              alt="Exemplo de um diagrama BPMN"
+              style="
+                width: 100%;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+              "
+            />
+          </div>
+
+          <div
+            class="steps-column"
+            style="flex: 1.2; font-size: 18px; line-height: 1.8; color: #ddd"
+          >
+            <ol style="list-style: none; padding-left: 0">
+              <li
+                style="
+                  margin-bottom: 20px;
+                  position: relative;
+                  padding-left: 45px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    top: 5px;
+                    width: 30px;
+                    height: 30px;
+                    background-color: #50e3c2;
+                    color: #121212;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 16px;
+                  "
+                  >1</span
+                >
+                Abra o
+                <a href="https://gemini.google.com/app" target="_blank"
+                  >Gemini</a
+                >
+                ou o <a href="https://claude.ai/new" target="_blank">Claude</a>.
+              </li>
+              <li
+                style="
+                  margin-bottom: 20px;
+                  position: relative;
+                  padding-left: 45px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    top: 5px;
+                    width: 30px;
+                    height: 30px;
+                    background-color: #50e3c2;
+                    color: #121212;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 16px;
+                  "
+                  >2</span
+                >
+                Printe o diagrama e cole a imagem na conversa.
+              </li>
+              <li
+                style="
+                  margin-bottom: 20px;
+                  position: relative;
+                  padding-left: 45px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    top: 5px;
+                    width: 30px;
+                    height: 30px;
+                    background-color: #50e3c2;
+                    color: #121212;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 16px;
+                  "
+                  >3</span
+                >
+                Escreva o prompt: <br />
+                <code
+                  style="
+                    display: block;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-left: 3px solid #50e3c2;
+                    padding: 10px;
+                    border-radius: 5px;
+                    margin-top: 8px;
+                    font-style: italic;
+                    color: #f0f0f0;
+                  "
+                  >"Sou um gerente de projetos e preciso apresentar o processo
+                  em anexo de forma mais interativa e visual para a minha
+                  equipe. Escreva esse processo uma apresentação em formato
+                  <strong>html</strong>."</code
+                >
+              </li>
+              <li
+                style="
+                  margin-bottom: 20px;
+                  position: relative;
+                  padding-left: 45px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    top: 5px;
+                    width: 30px;
+                    height: 30px;
+                    background-color: #50e3c2;
+                    color: #121212;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 16px;
+                  "
+                  >4</span
+                >
+                Copie o código e salve no Bloco de Notas como
+                <code
+                  style="background: #333; padding: 2px 5px; border-radius: 3px"
+                  >index.html</code
+                >.
+              </li>
+              <li
+                style="
+                  margin-bottom: 20px;
+                  position: relative;
+                  padding-left: 45px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    top: 5px;
+                    width: 30px;
+                    height: 30px;
+                    background-color: #50e3c2;
+                    color: #121212;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 16px;
+                  "
+                  >5</span
+                >
+                Arraste o arquivo para o
+                <a href="https://app.netlify.com/drop" target="_blank"
+                  >Netlify Drop</a
+                >.
+              </li>
+              <li
+                style="
+                  margin-bottom: 20px;
+                  position: relative;
+                  padding-left: 45px;
+                "
+              >
+                <span
+                  style="
+                    position: absolute;
+                    left: 0;
+                    top: 5px;
+                    width: 30px;
+                    height: 30px;
+                    background-color: #50e3c2;
+                    color: #121212;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 16px;
+                  "
+                  >6</span
+                >
+                Você terá um link na nuvem para compartilhar! 🚀
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="slide-13" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+      <div class="slide-content">
+        <h1 class="slide-title">Interagindo e refinando na mesma conversa</h1>
+        <div
+          style="
+            background: rgba(255, 255, 255, 0.08);
+            border-left: 5px solid #50e3c2;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 40px auto;
+            max-width: 800px;
+          "
+        >
+          <p style="color: #f0f0f0; font-size: 22px; line-height: 1.6">
+            <strong>Use o prompt:</strong>
+          </p>
+          <p
+            style="
+              color: #ddd;
+              font-size: 20px;
+              font-style: italic;
+              line-height: 1.6;
+            "
+          >
+            Ficou bom o fluxo. Agora torne-o ainda mais interativo criando um
+            jogo quiz divertido em pixel com pontuação quando o usuário acerta.
+          </p>
+        </div>
+        <p style="color: #ccc; font-size: 18px; text-align: center">
+          Continue a conversa com a IA para refinar e evoluir suas ideias!
+        </p>
+      </div>
+    </div>
+
+    <div id="slide-14" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+
+      <div
+        class="slide-content"
+        style="text-align: left; max-width: 950px; margin: 0 auto"
+      >
+        <h1 class="slide-title" style="text-align: center; margin-bottom: 25px">
+          Notas 📝
+        </h1>
+        <div
+          style="
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+          "
+        >
+          <p style="font-size: 19px; line-height: 1.7; color: #ddd; margin: 0">
+            O formato HTML é muito poderoso. Também pode ser usado para
+            desenvolver documentos mais visuais. Use o prompt:
+            <code
+              style="
+                background: rgba(80, 227, 194, 0.2);
+                color: #50e3c2;
+                padding: 3px 6px;
+                border-radius: 5px;
+                font-style: italic;
+              "
+              >"Faça esse documento se tornar mais visual criando um arquivo em
+              html"</code
+            >, depois transforme o HTML para PDF pelo site:
+            <a href="https://www.sejda.com/html-to-pdf" target="_blank"
+              >Sejda HTML to PDF</a
+            >.
+          </p>
+        </div>
+
+        <hr
+          style="
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(
+              to right,
+              rgba(80, 227, 194, 0),
+              rgba(80, 227, 194, 0.75),
+              rgba(80, 227, 194, 0)
+            );
+            margin: 45px 0;
+          "
+        />
+
+        <h2
+          class="slide-title"
+          style="text-align: center; font-size: 32px; margin-bottom: 25px"
+        >
+          Vamos analisar o prompt:
+        </h2>
+
+        <div
+          style="
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #50e3c2;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-style: italic;
+            font-size: 18px;
+            color: #f0f0f0;
+            line-height: 1.6;
+          "
+        >
+          "Sou um gerente de projetos e preciso replicar o processo em anexo de
+          forma mais interativa para a minha equipe. Escreva uma apresentação em
+          html com todos os passos desse processo."
+        </div>
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+          "
+        >
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 20px;
+              border-radius: 10px;
+            "
+          >
+            <h4
+              style="
+                color: #50e3c2;
+                font-size: 20px;
+                margin-top: 0;
+                margin-bottom: 10px;
+              "
+            >
+              🎭 Persona
+            </h4>
+            <p style="color: #ddd; margin: 0">
+              "Sou um gerente de projetos..."
+            </p>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 20px;
+              border-radius: 10px;
+            "
+          >
+            <h4
+              style="
+                color: #50e3c2;
+                font-size: 20px;
+                margin-top: 0;
+                margin-bottom: 10px;
+              "
+            >
+              📄 Contexto
+            </h4>
+            <p style="color: #ddd; margin: 0">
+              "...preciso replicar o processo em anexo..."
+            </p>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 20px;
+              border-radius: 10px;
+            "
+          >
+            <h4
+              style="
+                color: #50e3c2;
+                font-size: 20px;
+                margin-top: 0;
+                margin-bottom: 10px;
+              "
+            >
+              🎨 Estilo
+            </h4>
+            <p style="color: #ddd; margin: 0">
+              "...de forma mais interativa..."
+            </p>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 20px;
+              border-radius: 10px;
+            "
+          >
+            <h4
+              style="
+                color: #50e3c2;
+                font-size: 20px;
+                margin-top: 0;
+                margin-bottom: 10px;
+              "
+            >
+              👥 Audiência
+            </h4>
+            <p style="color: #ddd; margin: 0">"...para a minha equipe."</p>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 20px;
+              border-radius: 10px;
+            "
+          >
+            <h4
+              style="
+                color: #50e3c2;
+                font-size: 20px;
+                margin-top: 0;
+                margin-bottom: 10px;
+              "
+            >
+              📝 Tarefa & Formato
+            </h4>
+            <p style="color: #ddd; margin: 0">
+              "Escreva uma apresentação em html..."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="slide-18" class="slide hidden">
+      <style>
+        /* Animação para o título aparecer */
+        @keyframes fadeInDown {
+          from {
+            opacity: 0;
+            transform: translateY(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        /* Animação para o terminal aparecer */
+        @keyframes zoomIn {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        /* Animação de digitação */
+        @keyframes typing {
+          from {
+            width: 0;
+          }
+          to {
+            width: 100%;
+          }
+        }
+
+        /* Animação do cursor piscando */
+        @keyframes blink-caret {
+          from,
+          to {
+            border-color: transparent;
+          }
+          50% {
+            border-color: #50e3c2;
+          }
+        }
+
+        #slide-15 .slide-title {
+          animation: fadeInDown 0.8s ease-out forwards;
+          text-shadow: 0 0 15px rgba(80, 227, 194, 0.5);
+        }
+
+        .terminal-window {
+          background: #1e1e1e;
+          border: 1px solid #333;
+          border-radius: 8px;
+          max-width: 850px;
+          margin: 50px auto;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6),
+            0 0 20px rgba(80, 227, 194, 0.3);
+          opacity: 0; /* Começa invisível */
+          animation: zoomIn 0.7s ease-out 0.5s forwards; /* Animação com atraso */
+        }
+
+        .terminal-header {
+          background: #333;
+          padding: 8px;
+          border-top-left-radius: 7px;
+          border-top-right-radius: 7px;
+          display: flex;
+          align-items: center;
+        }
+
+        .terminal-button {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          margin-right: 8px;
+        }
+        .red {
+          background: #ff5f56;
+        }
+        .yellow {
+          background: #ffbd2e;
+        }
+        .green {
+          background: #27c93f;
+        }
+
+        .terminal-body {
+          padding: 25px;
+          font-family: "Courier New", Courier, monospace;
+        }
+
+        .typed-text {
+          color: #f0f0f0;
+          font-size: 22px;
+          line-height: 1.6;
+          display: inline-block;
+          overflow: hidden; /* Essencial para o efeito de digitação */
+          white-space: nowrap; /* Impede a quebra de linha */
+          border-right: 3px solid #50e3c2; /* O cursor */
+          /* A mágica acontece aqui! */
+          animation: typing 4.5s steps(60, end) 5.2s forwards,
+            blink-caret 1.05s step-end infinite 1.2s;
+          width: 0; /* Começa com largura zero */
+        }
+      </style>
+
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+
+      <div class="slide-content">
+        <h1 class="slide-title" style="text-align: center; font-size: 48px">
+          Hack Master: PCC<span style="color: #50e3c2">E</span> + IA
+        </h1>
+
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-button red"></div>
+            <div class="terminal-button yellow"></div>
+            <div class="terminal-button green"></div>
+          </div>
+          <div class="terminal-body">
+            <span class="typed-text"
+              >> Sou um engenheiro de prompt e preciso escrever um prompt
+              para...</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="slide-19" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+
+      <div class="slide-content" style="text-align: center">
+        <h1 class="slide-title" style="margin-bottom: 40px">
+          Perdidos no Meio
+        </h1>
+
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+          "
+        >
+          <img
+            src="perdido.jpg"
+            alt="Ilustração de uma pessoa confusa olhando para múltiplas placas de direção"
+            style="
+              width: 100%;
+              max-width: 420px;
+              border-radius: 15px;
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            "
+          />
+          <img
+            src="Serial_position.jpg"
+            alt="Gráfico demonstrando o 'Serial Position Effect', onde a retenção é maior no início e no fim"
+            style="
+              width: 100%;
+              max-width: 420px;
+              border-radius: 15px;
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            "
+          />
+        </div>
+
+        <a
+          href="https://cs.stanford.edu/~nfliu/papers/lost-in-the-middle.tacl2023.pdf"
+          target="_blank"
+          style="
+            display: inline-block;
+            background-color: #50e3c2;
+            color: #121212;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(80, 227, 194, 0.4);
+          "
+          onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(80, 227, 194, 0.5)';"
+          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(80, 227, 194, 0.4)';"
+        >
+          Acessar o Artigo 📄
+        </a>
+      </div>
+    </div>
+
+    <div id="slide-20" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+      <div class="slide-content">
+        <h1 class="slide-title">O meu último conselho é pra te ver feliz ✨</h1>
+
+        <div
+          style="
+            max-width: 800px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+          "
+        >
+          <h3
+            style="
+              color: #f0f0f0;
+              font-size: 22px;
+              margin-top: 0;
+              margin-bottom: 20px;
+              font-weight: 400;
+            "
+          ></h3>
+          <a
+            href="https://www.linkedin.com/feed/update/urn:li:activity:7363223052131672064/"
+            target="_blank"
+            class="cta-button"
+            style="text-decoration: none; padding: 15px 30px; font-size: 18px"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              style="vertical-align: middle; margin-right: 8px"
+            >
+              <path
+                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"
+              ></path>
+            </svg>
+            Ler Estudo no LinkedIn
+          </a>
+        </div>
+
+        <hr
+          style="
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(
+              to right,
+              rgba(80, 227, 194, 0),
+              rgba(80, 227, 194, 0.75),
+              rgba(80, 227, 194, 0)
+            );
+            margin: 50px 0;
+          "
+        />
+
+        <div style="text-align: center; margin-top: 40px">
+          <p
+            style="
+              font-size: 24px;
+              color: #ccc;
+              margin-bottom: 10px;
+              font-style: italic;
+            "
+          >
+            "Se beber, não dirija."
+          </p>
+          <p
+            style="
+              font-size: 52px;
+              color: #50e3c2;
+              font-weight: 700;
+              text-shadow: 0 0 15px rgba(80, 227, 194, 0.5);
+            "
+          >
+            "Se usar, finja."
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="slide-17" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+      <div class="slide-content">
+        <h1 class="slide-title">Dicas em Pílulas 💊</h1>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 40px auto 0;
+            text-align: left;
+          "
+        >
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 20px;
+              border-radius: 12px;
+            "
+          >
+            <h4
+              style="
+                color: #50e3c2;
+                font-size: 18px;
+                margin-top: 0;
+                margin-bottom: 10px;
+              "
+            >
+              🌐 Traduza com Precisão
+            </h4>
+            <p style="color: #ddd; margin: 0; font-size: 16px">
+              "Traduza o seguinte texto do idioma X para o Y."
+            </p>
+          </div>
+
+          <div
+            style="
+              background: rgba(80, 227, 194, 0.15);
+              padding: 20px;
+              border-radius: 12px;
+              grid-column: 1 / -1;
+              border-left: 3px solid #50e3c2;
+            "
+          >
+            <h4
+              style="
+                color: #50e3c2;
+                font-size: 18px;
+                margin-top: 0;
+                margin-bottom: 10px;
+              "
+            >
+              ✍️ Redação para uma escrita menos "ChatGPTiana"
+            </h4>
+            <p style="color: #ddd; margin: 0; font-size: 16px">
+              Peça à IA para <strong>evitar</strong>: advérbios de modo e
+              intensidade, grandiloquências, adjetivos em excesso e repetição de
+              palavras (buscando sinônimos).
+            </p>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 20px;
+              border-radius: 12px;
+            "
+          >
+            <h4
+              style="
+                color: #50e3c2;
+                font-size: 18px;
+                margin-top: 0;
+                margin-bottom: 10px;
+              "
+            >
+              📏 Defina Limites
+            </h4>
+            <p style="color: #ddd; margin: 0; font-size: 16px">
+              "Escreva um resumo com até 100 palavras."
+            </p>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 20px;
+              border-radius: 12px;
+            "
+          >
+            <h4
+              style="
+                color: #50e3c2;
+                font-size: 18px;
+                margin-top: 0;
+                margin-bottom: 10px;
+              "
+            >
+              👍👎 Peça Exemplos Opostos
+            </h4>
+            <p style="color: #ddd; margin: 0; font-size: 16px">
+              "Escreva exemplos positivos e negativos de..."
+            </p>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 20px;
+              border-radius: 12px;
+            "
+          >
+            <h4
+              style="
+                color: #50e3c2;
+                font-size: 18px;
+                margin-top: 0;
+                margin-bottom: 10px;
+              "
+            >
+              🧩 Quebre o Desafio
+            </h4>
+            <p style="color: #ddd; margin: 0; font-size: 16px">
+              Quanto menor a tarefa, melhor. Divida um problema complexo em mais
+              de um prompt.
+            </p>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 20px;
+              border-radius: 12px;
+            "
+          >
+            <h4
+              style="
+                color: #50e3c2;
+                font-size: 18px;
+                margin-top: 0;
+                margin-bottom: 10px;
+              "
+            >
+              💾 Crie Sua Biblioteca
+            </h4>
+            <p style="color: #ddd; margin: 0; font-size: 16px">
+              Salve os prompts que deram certo. Ajuste-os e reutilize-os quando
+              necessário.
+            </p>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 20px;
+              border-radius: 12px;
+            "
+          >
+            <h4
+              style="
+                color: #50e3c2;
+                font-size: 18px;
+                margin-top: 0;
+                margin-bottom: 10px;
+              "
+            >
+              ⌨️ Evite Erros de Digitação
+            </h4>
+            <p style="color: #ddd; margin: 0; font-size: 16px">
+              Revise seu prompt. Erros ou frases ambíguas podem confundir a IA e
+              gerar maus resultados.
+            </p>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 20px;
+              border-radius: 12px;
+            "
+          >
+            <h4
+              style="
+                color: #50e3c2;
+                font-size: 18px;
+                margin-top: 0;
+                margin-bottom: 10px;
+              "
+            >
+              🇺🇸 Use o Inglês a seu Favor
+            </h4>
+            <p style="color: #ddd; margin: 0; font-size: 16px">
+              Tente escrever prompts em inglês. Depois da resposta, peça para
+              traduzi-la para o português.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="slide-15" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+      <div class="slide-content">
+        <h1
+          class="slide-title"
+          style="
+            font-size: 52px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            font-weight: 600;
+          "
+        >
+          Regra Simplificada Para um Bom Prompt
+        </h1>
+        <div
+          class="acronym"
+          style="
+            font-size: 160px;
+            font-weight: 700;
+            text-align: center;
+            margin: 40px 0;
+            letter-spacing: 15px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+          "
+        >
+          P.C.C.<span
+            style="color: #ff6b00; text-shadow: 0 0 20px rgba(255, 107, 0, 0.7)"
+            >E</span
+          >.
+        </div>
+        <h2
+          class="subtitle"
+          style="
+            font-size: 38px;
+            color: #f0f0f0;
+            text-align: center;
+            font-weight: 400;
+            letter-spacing: 5px;
+          "
+        >
+          Persona • Contexto • Comando • Estilo
+        </h2>
+      </div>
+    </div>
+
+    <div id="slide-15" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+      <div class="slide-content">
+        <h1
+          class="slide-title"
+          style="
+            font-size: 52px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            font-weight: 600;
+          "
+        >
+          Regra Simplificada Para um Bom Prompt
+        </h1>
+        <div
+          class="acronym"
+          style="
+            font-size: 160px;
+            font-weight: 700;
+            text-align: center;
+            margin: 40px 0;
+            letter-spacing: 15px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+          "
+        >
+          P.C.C.<span
+            style="color: #ff6b00; text-shadow: 0 0 20px rgba(255, 107, 0, 0.7)"
+            >E</span
+          >.
+        </div>
+        <h2
+          class="subtitle"
+          style="
+            font-size: 38px;
+            color: #f0f0f0;
+            text-align: center;
+            font-weight: 400;
+            letter-spacing: 5px;
+          "
+        >
+          Persona • Contexto • Comando • Estilo
+        </h2>
+      </div>
+    </div>
+
+    <div id="slide-16" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+      <div class="slide-content">
+        <h1 class="slide-title">Analisando os Componentes</h1>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 40px auto 0;
+            text-align: left;
+          "
+        >
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 25px;
+              border-radius: 12px;
+              border-top: 3px solid #50e3c2;
+            "
+          >
+            <h3
+              style="
+                color: #50e3c2;
+                font-size: 24px;
+                margin-top: 0;
+                margin-bottom: 15px;
+              "
+            >
+              🎭 Persona
+            </h3>
+            <p style="color: #f0f0f0; font-size: 16px; line-height: 1.7">
+              "Você é um <strong>engenheiro civil</strong>..."<br />
+              "Você é um <strong>advogado sênior</strong>..."<br />
+              "Você é um <strong>professor</strong>..."
+            </p>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 25px;
+              border-radius: 12px;
+              border-top: 3px solid #50e3c2;
+            "
+          >
+            <h3
+              style="
+                color: #50e3c2;
+                font-size: 24px;
+                margin-top: 0;
+                margin-bottom: 15px;
+              "
+            >
+              📄 Contexto
+            </h3>
+            <p style="color: #f0f0f0; font-size: 16px; line-height: 1.7">
+              "...e precisa elaborar um
+              <strong>laudo técnico hospitalar</strong>."<br />
+              "...precisa elaborar um <strong>contrato</strong>."<br />
+              "...da FGV elaborando uma <strong>prova de auditor</strong>."
+            </p>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 25px;
+              border-radius: 12px;
+              border-top: 3px solid #50e3c2;
+            "
+          >
+            <h3
+              style="
+                color: #50e3c2;
+                font-size: 24px;
+                margin-top: 0;
+                margin-bottom: 15px;
+              "
+            >
+              ⚡️ Comando (Ação)
+            </h3>
+            <p style="color: #f0f0f0; font-size: 16px; line-height: 1.7">
+              "<strong>Escreva</strong> esse laudo..."<br />
+              "<strong>Especifique</strong> os principais pontos de
+              litígio..."<br />
+              "<strong>Identifique e explique</strong> os principais 'pegas' das
+              provas de AFO."
+            </p>
+          </div>
+
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              padding: 25px;
+              border-radius: 12px;
+              border-top: 3px solid #ff6b00;
+            "
+          >
+            <h3
+              style="
+                color: #ff6b00;
+                font-size: 24px;
+                margin-top: 0;
+                margin-bottom: 15px;
+              "
+            >
+              🎨 Estilo
+            </h3>
+            <p style="color: #f0f0f0; font-size: 16px; line-height: 1.7">
+              "...utilizando <strong>termos da RDC 50</strong>."<br />
+              "...para uma <strong>audiência leiga</strong>."<br />
+              "...em <strong>formato HTML</strong> para facilitar a
+              memorização."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="slide-21" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+
+      <div
+        class="slide-content"
+        style="text-align: left; max-width: 1100px; margin: 0 auto"
+      >
+        <h1 class="slide-title" style="text-align: center; margin-bottom: 40px">
+          Indicações & Referências
+        </h1>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px">
+          <div>
+            <h2
+              style="
+                color: #50e3c2;
+                font-size: 28px;
+                border-bottom: 2px solid #50e3c2;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+              "
+            >
+              📚 Livros
+            </h2>
+            <ul style="list-style: none; padding-left: 0">
+              <li
+                style="
+                  background: rgba(255, 255, 255, 0.05);
+                  padding: 15px;
+                  border-radius: 8px;
+                  margin-bottom: 15px;
+                "
+              >
+                <p style="font-size: 18px; color: #f0f0f0; margin: 0">
+                  <strong>The Quick Guide to Prompt Engineering:</strong>
+                  Generative AI Tips and Tricks for ChatGPT, Bard, Dall-E, and
+                  Midjourney
+                </p>
+              </li>
+              <li
+                style="
+                  background: rgba(255, 255, 255, 0.05);
+                  padding: 15px;
+                  border-radius: 8px;
+                  margin-bottom: 15px;
+                "
+              >
+                <p style="font-size: 18px; color: #f0f0f0; margin: 0">
+                  <strong>A História da IA para quem tem pressa</strong>
+                </p>
+              </li>
+              <li
+                style="
+                  background: rgba(255, 255, 255, 0.05);
+                  padding: 15px;
+                  border-radius: 8px;
+                "
+              >
+                <p style="font-size: 18px; color: #f0f0f0; margin: 0">
+                  <strong>Neural Networks and Deep Learning</strong>
+                </p>
+                <p style="font-size: 15px; color: #ccc; margin: 5px 0 0">
+                  - Pat Nakamoto
+                </p>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h2
+              style="
+                color: #ff6b00;
+                font-size: 28px;
+                border-bottom: 2px solid #ff6b00;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+              "
+            >
+              🎬 Vídeos
+            </h2>
+            <ul style="list-style: none; padding-left: 0">
+              <li
+                style="
+                  background: rgba(255, 255, 255, 0.05);
+                  padding: 15px;
+                  border-radius: 8px;
+                  margin-bottom: 15px;
+                "
+              >
+                <a
+                  href="https://www.youtube.com/watch?v=LWiMwhDZ9as"
+                  target="_blank"
+                  style="text-decoration: none; font-size: 18px; color: #f0f0f0"
+                >
+                  <strong>Learn Prompt Engineering:</strong> Full Beginner Crash
+                  Course (5 HOURS!)
+                </a>
+                <p style="font-size: 15px; color: #ccc; margin: 5px 0 0">
+                  - Canal: Zero To Mastery
+                </p>
+              </li>
+              <li
+                style="
+                  background: rgba(255, 255, 255, 0.05);
+                  padding: 15px;
+                  border-radius: 8px;
+                  margin-bottom: 15px;
+                "
+              >
+                <a
+                  href="https://www.youtube.com/watch?v=sf4Gxf0LiKo"
+                  target="_blank"
+                  style="text-decoration: none; font-size: 18px; color: #f0f0f0"
+                >
+                  <strong
+                    >MENTIRAM PRA VOCÊ SOBRE INTELIGÊNCIA ARTIFICIAL</strong
+                  >
+                  [com Fabio Akita]
+                </a>
+                <p style="font-size: 15px; color: #ccc; margin: 5px 0 0">
+                  - Canal: Flow Podcast
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="slide-4" class="slide hidden">
+      <div class="abstract-element element-1"></div>
+      <div class="abstract-element element-2"></div>
+
+      <div class="question-slide">
+        <h1 class="big-question">
+          A Inteligência Artificial é mesmo inteligente?
+        </h1>
+
+        <button class="clickable-element" onclick="revealSecondQuestion()">
+          <span class="question-emoji">🤔</span>
+          Hmm... deixe-me pensar sobre isso
+        </button>
+
+        <div id="hiddenQuestion" class="hidden-question">
+          Se não é inteligente, por que possui esse nome?
+        </div>
+      </div>
+    </div>
+
+    <div id="turingModal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <img src="turing.jpeg" alt="Alan Turing" class="modal-image" />
+          <button class="modal-close" onclick="closeTuringModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <h3 class="modal-title">Alan Turing (1912-1954)</h3>
+          <p class="modal-description">
+            Matemático e cientista da computação britânico, considerado o pai da
+            ciência da computação e da inteligência artificial. O Teste de
+            Turing, proposto em 1950, continua sendo um marco fundamental para
+            avaliar a capacidade de uma máquina exibir comportamento
+            inteligente.
+          </p>
+          <a
+            href="https://www.youtube.com/watch?v=t1BwXch_DDo"
+            target="_blank"
+            class="modal-video-btn"
+          >
+            <span class="video-icon">▶</span>
+            Assistir Vídeo sobre Turing
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div id="kasparovModal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <img
+            src="kasparov.jpg"
+            alt="Garry Kasparov vs Deep Blue"
+            class="modal-image"
+          />
+          <button class="modal-close" onclick="closeKasparovModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <h3 class="modal-title">Deep Blue vs Kasparov (1997)</h3>
+          <p class="modal-description">
+            Marco histórico da inteligência artificial: o supercomputador Deep
+            Blue da IBM derrotou o campeão mundial de xadrez Garry Kasparov em
+            uma partida de 6 jogos. Este foi o primeiro computador a vencer um
+            campeão mundial de xadrez em condições de torneio, provando que as
+            máquinas poderiam superar humanos em tarefas complexas de
+            estratégia.
+          </p>
+          <a
+            href="https://www.youtube.com/watch?v=NP8xt8o4_5Q"
+            target="_blank"
+            class="modal-video-btn"
+          >
+            <span class="video-icon">▶</span>
+            Assistir Vídeo sobre Deep Blue
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div id="transformerModal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <img
+            src="attention-is-all-you-need.png"
+            alt="Attention Is All You Need Paper"
+            class="modal-image"
+          />
+          <button class="modal-close" onclick="closeTransformerModal()">
+            ×
+          </button>
+        </div>
+        <div class="modal-body">
+          <h3 class="modal-title">"Attention Is All You Need" (2017)</h3>
+          <p class="modal-description">
+            Paper revolucionário que introduziu a arquitetura Transformer,
+            desenvolvida por pesquisadores do Google. Esta arquitetura eliminou
+            a necessidade de redes recorrentes e convolucionais, usando apenas
+            mecanismos de atenção. O Transformer se tornou a base para modelos
+            como GPT, BERT e ChatGPT, revolucionando completamente o
+            processamento de linguagem natural.
+          </p>
+          <a
+            href="https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf"
+            target="_blank"
+            class="modal-video-btn"
+          >
+            <span class="video-icon">📄</span>
+            Ler Paper Original
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Adicionar slides restantes dinamicamente
+      for (let i = 5; i <= 31; i++) {
+        const slide = document.createElement("div");
+        slide.id = `slide-${i}`;
+        slide.className = "slide hidden";
+
+        if (i === 5) {
+          slide.innerHTML = `
+                                <div class="slide-content">
+                                    <h1 class="slide-title">O futuro é o mesmo do que era antigamente</h1>
+                                    <div class="slide-text" style="text-align: left; max-width: 800px; margin: 0 auto;">
+                                        <blockquote style="margin-bottom: 30px; border-left: 4px solid #50e3c2; padding-left: 20px; font-style: italic;">
+                                            <p>“Estou convencido de que as máquinas podem e vão pensar durante a nossa existência.”</p>
+                                            <footer style="text-align: right; color: #f0f0f0; font-style: normal; margin-top: 10px;">— Oliver Selfridge, 1961</footer>
+                                        </blockquote>
+                                        <blockquote style="margin-bottom: 30px; border-left: 4px solid #50e3c2; padding-left: 20px; font-style: italic;">
+                                            <p>“Tenho a confiança de que dentro de dez ou quinze anos algo surgirá do laboratório que não estará muito longe dos famosos robôs da ficção científica.”</p>
+                                            <footer style="text-align: right; color: #f0f0f0; font-style: normal; margin-top: 10px;">— Claude Shannon, 1961</footer>
+                                        </blockquote>
+                                        <blockquote style="margin-bottom: 30px; border-left: 4px solid #50e3c2; padding-left: 20px; font-style: italic;">
+                                            <p>“As máquinas serão capazes, dentro de vinte anos, de fazer qualquer trabalho que um homem possa fazer.”</p>
+                                            <footer style="text-align: right; color: #f0f0f0; font-style: normal; margin-top: 10px;">— Herbert Simon, 1965</footer>
+                                        </blockquote>
+                                        <blockquote style="margin-bottom: 30px; border-left: 4px solid #50e3c2; padding-left: 20px; font-style: italic;">
+                                            <p>“Dentro de uma geração, eu estou convencido de que poucos compartimentos do intelecto permanecerão fora da capacidade da máquina — o problema de criar ‘inteligência artificial’ será resolvido de maneira considerável.”</p>
+                                            <footer style="text-align: right; color: #f0f0f0; font-style: normal; margin-top: 10px;">— Marvin Minsky, 1967</footer>
+                                        </blockquote>
+                                    </div>
+                                </div>
+                                `;
+        } else if (i === 6) {
+          slide.innerHTML = `
+                          <div class="slide-content">
+                                <h1 class="slide-title">Tokenização</h1>
+                                <div class="slide-text" style="text-align: center; max-width: 900px; margin: 0 auto;">
+                                    <div style="display: flex; justify-content: space-around; align-items: center; gap: 40px; margin-bottom: 50px; flex-wrap: wrap;">
+                                        <div style="background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 12px; border-left: 4px solid #50e3c2; flex: 1; min-width: 300px;">
+                                            <h3 style="color: #50e3c2; font-size: 28px; margin-bottom: 15px;">1 Token ≈ ¾ Palavra</h3>
+                                            <p style="font-size: 20px; line-height: 1.5;">Um token equivale a aproximadamente 0,75 palavras. É a unidade fundamental que a IA processa.</p>
+                                        </div>
+                                        <div style="background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 12px; border-left: 4px solid #ff6b00; flex: 1; min-width: 300px;">
+                                             <h3 style="color: #ff6b00; font-size: 28px; margin-bottom: 15px;">Tokens ➔ Vetores</h3>
+                                             <p style="font-size: 20px; line-height: 1.5;">Esses tokens são convertidos em vetores numéricos, permitindo que o modelo entenda e processe a linguagem.</p>
+                                        </div>
+                                    </div>
+                                    <a href="https://platform.openai.com/tokenizer" target="_blank" class="cta-button" style="background: linear-gradient(135deg, #50e3c2, #3dd6b5); box-shadow: 0 10px 30px rgba(80, 227, 194, 0.3);">
+                                        <span style="font-size: 24px; margin-right: 10px;">⚙️</span>
+                                        Testar o Tokenizer
+                                    </a>
+                                </div>
+                          </div>
+                        `;
+        } else if (i === 7) {
+          slide.innerHTML = `
+                                <div class="slide-content">
+                                    <h1 class="slide-title">Entendendo um pouco mais o nosso <span class="fast-furious-style">autocomplete tunado</span></h1>
+                                    <div class="slide-text" style="text-align: center; max-width: 800px; margin: 0 auto;">
+                                        
+                                        <div class="prompt-container">
+                                            <pre id="prompt-text"><code>Gere dois números primos maiores que 100 (A e B). Calcule A * B = C.
+Sua resposta deve ser fornecida nesta ordem e não pode conter nenhum texto adicional:
+C =
+
+B =
+
+A =</code></pre>
+                                            <button class="copy-btn" onclick="copyPrompt(this)">Copiar</button>
+                                        </div>
+
+                                        <a href="https://openrouter.ai/chat?room=orc-1755743908-PXlsAkIVh2EtSn8kSg7M" target="_blank" class="cta-button" style="margin-top: 50px;">
+                                            Acessar OpenRouter
+                                        </a>
+                                    </div>
+                                </div>
+                              `;
+        } else if (i === 8) {
+          slide.innerHTML = `
+                          <div class="slide-content">
+                                <h1 class="slide-title">Desmistificando o Sabe-Tudo</h1>
+                                <div class="emoji-container">
+                                    <span class="large-emoji">🔮</span>
+                                    <span class="large-emoji">🎲</span>
+                                </div>
+                          </div>
+                        `;
+        } else if (i === 10) {
+          slide.innerHTML = `
+            <div class="slide-content">
+                  <h1 class="slide-title">Redes Neurais Multicamadas</h1>
+                  <div class="slide-text" style="text-align: center; max-width: 1100px; margin: 0 auto;">
+                      
+                      <div class="neural-network-diagram" style="background: rgba(255, 255, 255, 0.05); padding: 50px 30px; border-radius: 20px; border: 2px solid rgba(80, 227, 194, 0.3); margin: 40px auto; position: relative; overflow: hidden;">
+                          
+                          <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at center, rgba(80, 227, 194, 0.1) 0%, transparent 50%); pointer-events: none;"></div>
+                          
+                          <svg viewBox="0 0 800 400" style="width: 100%; height: 400px; position: relative; z-index: 2;">
+                              <defs>
+                                  <linearGradient id="nodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                      <stop offset="0%" style="stop-color:#50e3c2;stop-opacity:1" />
+                                      <stop offset="100%" style="stop-color:#3dd6b5;stop-opacity:1" />
+                                  </linearGradient>
+                                  <linearGradient id="outputGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                      <stop offset="0%" style="stop-color:#ff6b00;stop-opacity:1" />
+                                      <stop offset="100%" style="stop-color:#ff7f1a;stop-opacity:1" />
+                                  </linearGradient>
+                                  <filter id="glow">
+                                      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                      <feMerge> 
+                                          <feMergeNode in="coloredBlur"/>
+                                          <feMergeNode in="SourceGraphic"/>
+                                      </feMerge>
+                                  </filter>
+                              </defs>
+                              
+                              <line x1="120" y1="120" x2="250" y2="80" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.7">
+                                  <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3s" repeatCount="indefinite"/>
+                              </line>
+                              <line x1="120" y1="120" x2="250" y2="140" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0.8"/>
+                              <line x1="120" y1="120" x2="250" y2="200" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.5"/>
+                              <line x1="120" y1="120" x2="250" y2="260" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.6"/>
+                              <line x1="120" y1="120" x2="250" y2="320" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.4"/>
+                              
+                              <line x1="120" y1="200" x2="250" y2="80" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.4"/>
+                              <line x1="120" y1="200" x2="250" y2="140" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.6"/>
+                              <line x1="120" y1="200" x2="250" y2="200" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" opacity="0.9">
+                                  <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
+                              </line>
+                              <line x1="120" y1="200" x2="250" y2="260" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.7"/>
+                              <line x1="120" y1="200" x2="250" y2="320" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.5"/>
+                              
+                              <line x1="120" y1="280" x2="250" y2="80" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.3"/>
+                              <line x1="120" y1="280" x2="250" y2="140" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.4"/>
+                              <line x1="120" y1="280" x2="250" y2="200" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.6"/>
+                              <line x1="120" y1="280" x2="250" y2="260" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0.8"/>
+                              <line x1="120" y1="280" x2="250" y2="320" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.7">
+                                  <animate attributeName="opacity" values="0.4;0.9;0.4" dur="2s" repeatCount="indefinite"/>
+                              </line>
+                              
+                              <line x1="280" y1="80" x2="420" y2="100" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.6"/>
+                              <line x1="280" y1="80" x2="420" y2="160" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0.7"/>
+                              <line x1="280" y1="80" x2="420" y2="220" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.4"/>
+                              <line x1="280" y1="80" x2="420" y2="280" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.3"/>
+                              
+                              <line x1="280" y1="140" x2="420" y2="100" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.5"/>
+                              <line x1="280" y1="140" x2="420" y2="160" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" opacity="0.8"/>
+                              <line x1="280" y1="140" x2="420" y2="220" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.6"/>
+                              <line x1="280" y1="140" x2="420" y2="280" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.4"/>
+                              
+                              <line x1="280" y1="200" x2="420" y2="100" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.4"/>
+                              <line x1="280" y1="200" x2="420" y2="160" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.6"/>
+                              <line x1="280" y1="200" x2="420" y2="220" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" opacity="0.9">
+                                  <animate attributeName="opacity" values="0.6;1;0.6" dur="2.8s" repeatCount="indefinite"/>
+                              </line>
+                              <line x1="280" y1="200" x2="420" y2="280" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.7"/>
+                              
+                              <line x1="280" y1="260" x2="420" y2="100" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.3"/>
+                              <line x1="280" y1="260" x2="420" y2="160" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.4"/>
+                              <line x1="280" y1="260" x2="420" y2="220" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.6"/>
+                              <line x1="280" y1="260" x2="420" y2="280" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0.8"/>
+                              
+                              <line x1="280" y1="320" x2="420" y2="100" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.2"/>
+                              <line x1="280" y1="320" x2="420" y2="160" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.3"/>
+                              <line x1="280" y1="320" x2="420" y2="220" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.4"/>
+                              <line x1="280" y1="320" x2="420" y2="280" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.6"/>
+                              
+                              <line x1="450" y1="100" x2="580" y2="160" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0.7"/>
+                              <line x1="450" y1="100" x2="580" y2="240" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.6"/>
+                              
+                              <line x1="450" y1="160" x2="580" y2="160" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" opacity="0.9">
+                                  <animate attributeName="opacity" values="0.6;1;0.6" dur="2.2s" repeatCount="indefinite"/>
+                              </line>
+                              <line x1="450" y1="160" x2="580" y2="240" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0.8"/>
+                              
+                              <line x1="450" y1="220" x2="580" y2="160" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" opacity="0.6"/>
+                              <line x1="450" y1="220" x2="580" y2="240" stroke="rgba(255,255,255,0.3)" stroke-width="2.5" opacity="0.9"/>
+                              
+                              <line x1="450" y1="280" x2="580" y2="160" stroke="rgba(255,255,255,0.3)" stroke-width="1" opacity="0.4"/>
+                              <line x1="450" y1="280" x2="580" y2="240" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0.7">
+                                  <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3.5s" repeatCount="indefinite"/>
+                              </line>
+                              
+                              <circle cx="120" cy="120" r="15" fill="url(#nodeGradient)" filter="url(#glow)" opacity="0.9">
+                                  <animate attributeName="r" values="15;18;15" dur="3s" repeatCount="indefinite"/>
+                              </circle>
+                              <circle cx="120" cy="200" r="15" fill="url(#nodeGradient)" filter="url(#glow)" opacity="0.9">
+                                  <animate attributeName="r" values="15;18;15" dur="3s" repeatCount="indefinite" begin="0.5s"/>
+                              </circle>
+                              <circle cx="120" cy="280" r="15" fill="url(#nodeGradient)" filter="url(#glow)" opacity="0.9">
+                                  <animate attributeName="r" values="15;18;15" dur="3s" repeatCount="indefinite" begin="1s"/>
+                              </circle>
+                              
+                              <circle cx="280" cy="80" r="15" fill="url(#nodeGradient)" filter="url(#glow)" opacity="0.8"/>
+                              <circle cx="280" cy="140" r="15" fill="url(#nodeGradient)" filter="url(#glow)" opacity="0.8"/>
+                              <circle cx="280" cy="200" r="15" fill="url(#nodeGradient)" filter="url(#glow)" opacity="0.8">
+                                  <animate attributeName="r" values="15;19;15" dur="2.5s" repeatCount="indefinite"/>
+                              </circle>
+                              <circle cx="280" cy="260" r="15" fill="url(#nodeGradient)" filter="url(#glow)" opacity="0.8"/>
+                              <circle cx="280" cy="320" r="15" fill="url(#nodeGradient)" filter="url(#glow)" opacity="0.8"/>
+                              
+                              <circle cx="450" cy="100" r="15" fill="url(#nodeGradient)" filter="url(#glow)" opacity="0.8"/>
+                              <circle cx="450" cy="160" r="15" fill="url(#nodeGradient)" filter="url(#glow)" opacity="0.8">
+                                  <animate attributeName="r" values="15;19;15" dur="2.8s" repeatCount="indefinite"/>
+                              </circle>
+                              <circle cx="450" cy="220" r="15" fill="url(#nodeGradient)" filter="url(#glow)" opacity="0.8"/>
+                              <circle cx="450" cy="280" r="15" fill="url(#nodeGradient)" filter="url(#glow)" opacity="0.8"/>
+                              
+                              <circle cx="610" cy="160" r="18" fill="url(#outputGradient)" filter="url(#glow)" opacity="0.9">
+                                  <animate attributeName="r" values="18;22;18" dur="2s" repeatCount="indefinite"/>
+                              </circle>
+                              <circle cx="610" cy="240" r="18" fill="url(#outputGradient)" filter="url(#glow)" opacity="0.9">
+                                  <animate attributeName="r" values="18;22;18" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                              </circle>
+                              
+                              <text x="120" y="50" text-anchor="middle" fill="#50e3c2" font-size="14" font-weight="600">Camada de</text>
+                              <text x="120" y="65" text-anchor="middle" fill="#50e3c2" font-size="14" font-weight="600">Entrada</text>
+                              
+                              <text x="365" y="30" text-anchor="middle" fill="#50e3c2" font-size="14" font-weight="600">Camadas Escondidas</text>
+                              
+                              <text x="610" y="50" text-anchor="middle" fill="#ff6b00" font-size="14" font-weight="600">Camada de</text>
+                              <text x="610" y="65" text-anchor="middle" fill="#ff6b00" font-size="14" font-weight="600">Saída</text>
+                              
+
+                          </svg>
+                      </div>
+                      
+                      <a href="https://openreview.net/pdf?id=yzkSU5zdwD" target="_blank" style="display: block; margin-top: 30px; color: #f0f0f0; text-decoration: underline; font-size: 16px; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.6; transition: color 0.3s;" onmouseover="this.style.color='#50e3c2'" onmouseout="this.style.color='#f0f0f0'">
+                          O GPT-3 é um LLM com 175 bilhões de parâmetros distribuídos em 96 camadas, treinado em 300 bilhões de tokens.
+                      </a>
+                      
+                      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                          
+                          <div style="background: rgba(80, 227, 194, 0.1); padding: 20px; border-radius: 12px; border: 1px solid rgba(80, 227, 194, 0.3); text-align: center;">
+                              <div style="font-size: 24px; margin-bottom: 10px;">🔵</div>
+                              <h4 style="color: #50e3c2; font-size: 16px; margin-bottom: 8px;">Neurônios</h4>
+                              <p style="color: #f0f0f0; font-size: 12px; line-height: 1.4;">Unidades de processamento que recebem, processam e transmitem informações</p>
+                          </div>
+                          
+                          <div style="background: rgba(255, 107, 0, 0.1); padding: 20px; border-radius: 12px; border: 1px solid rgba(255, 107, 0, 0.3); text-align: center;">
+                              <div style="font-size: 24px; margin-bottom: 10px;">🎯</div>
+                              <h4 style="color: #ff6b00; font-size: 16px; margin-bottom: 8px;">Ativação</h4>
+                              <p style="color: #f0f0f0; font-size: 12px; line-height: 1.4;">Função que decide se um neurônio deve ser ativado</p>
+                          </div>
+                          
+                      </div>
+                  </div>
+            </div>
+                        `;
+        } else if (i === 9) {
+          slide.innerHTML = `
+                          <div class="slide-content">
+                                <h1 class="slide-title" style="color: #FFD700; text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5); animation: pulse-gold 2s infinite;">🎟️ SORTEAR UMA RIFA</h1>
+                                
+                                <div style="background: linear-gradient(135deg, #ff6b00, #ff7f1a); padding: 40px; border-radius: 20px; border: 4px solid #FFD700; box-shadow: 0 20px 40px rgba(255, 215, 0, 0.4); margin: 40px auto; max-width: 600px; text-align: center; position: relative; overflow: hidden;">
+                                    <div style="position: absolute; top: -50px; left: -50px; width: 100px; height: 100px; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%); border-radius: 50%; animation: sparkle 3s infinite;"></div>
+                                    <div style="position: absolute; bottom: -30px; right: -30px; width: 60px; height: 60px; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%); border-radius: 50%; animation: sparkle 3s infinite 1.5s;"></div>
+                                    
+                                    <div style="font-size: 48px; color: white; font-weight: 700; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                                        PARTICIPE DO SORTEIO!
+                                    </div>
+                                    
+                                    <div style="font-size: 24px; color: #FFD700; margin-bottom: 30px; font-weight: 600;">
+                                        🎊 Prêmio Especial te Aguarda! 🎊
+                                    </div>
+                                    
+                                    <button onclick="window.open('https://globo.com', '_blank')" class="lottery-button" style="
+                                        background: linear-gradient(135deg, #FFD700, #FFA500);
+                                        color: #000;
+                                        font-size: 28px;
+                                        font-weight: 700;
+                                        padding: 20px 40px;
+                                        border: none;
+                                        border-radius: 15px;
+                                        cursor: pointer;
+                                        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
+                                        transition: all 0.3s ease;
+                                        text-transform: uppercase;
+                                        letter-spacing: 2px;
+                                        position: relative;
+                                        overflow: hidden;
+                                        animation: button-glow 2s infinite alternate;
+                                    " onmouseover="this.style.transform='scale(1.05) translateY(-3px)'; this.style.boxShadow='0 12px 35px rgba(255, 215, 0, 0.7)'" onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='0 8px 25px rgba(255, 215, 0, 0.5)'">
+                                        🎯 Escolha um número de 1 a 30 🎯
+                                    </button>
+                                </div>
+                                
+                                <div style="display: flex; justify-content: center; gap: 30px; margin-top: 40px; flex-wrap: wrap;">
+                                    <div style="font-size: 60px; animation: bounce-prizes 2s infinite;">🏆</div>
+                                    <div style="font-size: 60px; animation: bounce-prizes 2s infinite 0.5s;">💰</div>
+                                    <div style="font-size: 60px; animation: bounce-prizes 2s infinite 1s;">🎁</div>
+                                </div>
+                                
+                                <div style="margin-top: 30px; font-size: 20px; color: #FFD700; font-weight: 600; animation: blink 1.5s infinite;">
+                                    ✨ A SORTE ESTÁ TE CHAMANDO! ✨
+                                </div>
+                          </div>
+                          
+                          <style>
+                            @keyframes pulse-gold {
+                                0% { transform: scale(1); }
+                                50% { transform: scale(1.02); }
+                                100% { transform: scale(1); }
+                            }
+                            
+                            @keyframes sparkle {
+                                0% { opacity: 0; transform: rotate(0deg) scale(0); }
+                                50% { opacity: 1; transform: rotate(180deg) scale(1); }
+                                100% { opacity: 0; transform: rotate(360deg) scale(0); }
+                            }
+                            
+                            @keyframes button-glow {
+                                0% { box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3); }
+                                100% { box-shadow: 0 8px 25px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.5); }
+                            }
+                            
+                            @keyframes bounce-prizes {
+                                0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                                40% { transform: translateY(-15px); }
+                                60% { transform: translateY(-7px); }
+                            }
+                            
+                            @keyframes blink {
+                                0%, 50% { opacity: 1; }
+                                51%, 100% { opacity: 0.5; }
+                            }
+                          </style>
+                        `;
+        } else {
+          slide.innerHTML = `
+                                <div class="slide-content">
+                                    <h1 class="slide-title">Slide ${i}</h1>
+                                    <div class="slide-text">
+                                        <p>Conteúdo do slide ${i} será adicionado aqui...</p>
+                                    </div>
+                                </div>
+                                `;
+        }
+        document.body.appendChild(slide);
+      }
+    </script>
+
+    <div class="navigation">
+      <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>
+        ← Anterior
+      </button>
+      <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">23</span>
+      </div>
+      <button class="nav-btn" id="nextBtn" onclick="nextSlide()">
+        Próximo →
+      </button>
+    </div>
+
+    <script>
+      let currentSlideIndex = 0;
+      const totalSlides = 32;
+
+      function showSlide(index) {
+        // Esconder todos os slides
+        for (let i = 0; i < totalSlides; i++) {
+          const slide = document.getElementById(`slide-${i}`);
+          if (slide) {
+            slide.classList.add("hidden");
+          }
+        }
+
+        // Mostrar slide atual
+        const currentSlide = document.getElementById(`slide-${index}`);
+        if (currentSlide) {
+          currentSlide.classList.remove("hidden");
+        }
+
+        // Controlar navegação baseado no slide
+        const navigation = document.querySelector(".navigation");
+
+        if (index === 0) {
+          // No slide inicial, esconder completamente a navegação
+          navigation.classList.add("hidden");
+        } else {
+          // Em outros slides, mostrar a navegação mas inicialmente invisível
+          navigation.classList.remove("hidden");
+          navigation.classList.remove("show");
+
+          // Configurar listener de scroll para mostrar navegação
+          setupScrollListener(currentSlide, navigation);
+        }
+
+        // Atualizar contador
+        document.getElementById("currentSlide").textContent = index + 1;
+
+        // Atualizar botões de navegação
+        document.getElementById("prevBtn").disabled = index === 0;
+        document.getElementById("nextBtn").disabled = index === totalSlides - 1;
+
+        // Scroll para o topo do slide
+        if (currentSlide) {
+          currentSlide.scrollTop = 0;
+        }
+
+        // Reset do slide 4 quando sair dele
+        if (index !== 4) {
+          const hiddenQuestion = document.getElementById("hiddenQuestion");
+          if (hiddenQuestion) {
+            hiddenQuestion.classList.remove("show");
+          }
+        }
+      }
+
+      function setupScrollListener(slideElement, navigationElement) {
+        // Remove listeners anteriores se existirem
+        if (slideElement.scrollHandler) {
+          slideElement.removeEventListener(
+            "scroll",
+            slideElement.scrollHandler
+          );
+        }
+        if (slideElement.windowScrollHandler) {
+          window.removeEventListener(
+            "scroll",
+            slideElement.windowScrollHandler
+          );
+        }
+
+        function checkScroll() {
+          const slideScrollHeight = slideElement.scrollHeight;
+          const slideScrollTop = slideElement.scrollTop;
+          const slideClientHeight = slideElement.clientHeight;
+
+          const windowScrollY = window.scrollY;
+          const documentHeight = document.body.offsetHeight;
+          const windowHeight = window.innerHeight;
+
+          // Verificar se chegou ao final do slide ou da página
+          const slideAtBottom =
+            slideScrollHeight - slideScrollTop <= slideClientHeight + 10;
+          const windowAtBottom =
+            windowHeight + windowScrollY >= documentHeight - 10;
+
+          // Para slides que cabem na tela, verificar se o conteúdo é menor que a viewport
+          const contentFitsScreen = slideScrollHeight <= slideClientHeight;
+
+          if (slideAtBottom || windowAtBottom || contentFitsScreen) {
+            navigationElement.classList.add("show");
+          } else {
+            navigationElement.classList.remove("show");
+          }
+        }
+
+        // Listener para scroll do slide (se tiver overflow)
+        slideElement.scrollHandler = checkScroll;
+        slideElement.addEventListener("scroll", slideElement.scrollHandler);
+
+        // Listener para scroll da janela
+        slideElement.windowScrollHandler = checkScroll;
+        window.addEventListener("scroll", slideElement.windowScrollHandler);
+
+        // Verificar estado inicial após um breve delay
+        setTimeout(checkScroll, 100);
+      }
+
+      function nextSlide() {
+        if (currentSlideIndex < totalSlides - 1) {
+          currentSlideIndex++;
+          showSlide(currentSlideIndex);
+        }
+      }
+
+      function prevSlide() {
+        if (currentSlideIndex > 0) {
+          currentSlideIndex--;
+          showSlide(currentSlideIndex);
+        }
+      }
+
+      function revealSecondQuestion() {
+        const hiddenQuestion = document.getElementById("hiddenQuestion");
+        hiddenQuestion.classList.add("show");
+      }
+
+      // Função para copiar o prompt
+      function copyPrompt(button) {
+        const promptText = document.getElementById("prompt-text").innerText;
+        navigator.clipboard.writeText(promptText).then(
+          () => {
+            button.innerText = "Copiado!";
+            setTimeout(() => {
+              button.innerText = "Copiar";
+            }, 2000);
+          },
+          (err) => {
+            console.error("Erro ao copiar texto: ", err);
+          }
+        );
+      }
+
+      // Funções do modal do Turing
+      function openTuringModal() {
+        const modal = document.getElementById("turingModal");
+        modal.classList.add("show");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeTuringModal() {
+        const modal = document.getElementById("turingModal");
+        modal.classList.remove("show");
+        document.body.style.overflow = "";
+      }
+
+      // Funções do modal do Kasparov
+      function openKasparovModal() {
+        const modal = document.getElementById("kasparovModal");
+        modal.classList.add("show");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeKasparovModal() {
+        const modal = document.getElementById("kasparovModal");
+        modal.classList.remove("show");
+        document.body.style.overflow = "";
+      }
+
+      // Funções do modal do Transformer
+      function openTransformerModal() {
+        const modal = document.getElementById("transformerModal");
+        modal.classList.add("show");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeTransformerModal() {
+        const modal = document.getElementById("transformerModal");
+        modal.classList.remove("show");
+        document.body.style.overflow = "";
+      }
+
+      // Fechar modais ao clicar fora do conteúdo
+      document.addEventListener("click", function (event) {
+        const turingModal = document.getElementById("turingModal");
+        const kasparovModal = document.getElementById("kasparovModal");
+        const transformerModal = document.getElementById("transformerModal");
+
+        if (event.target === turingModal) {
+          closeTuringModal();
+        }
+        if (event.target === kasparovModal) {
+          closeKasparovModal();
+        }
+        if (event.target === transformerModal) {
+          closeTransformerModal();
+        }
+      });
+
+      // Fechar modais com ESC
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closeTuringModal();
+          closeKasparovModal();
+          closeTransformerModal();
+        }
+      });
+
+      // Navegação por teclado
+      document.addEventListener("keydown", function (event) {
+        // Só permitir navegação por teclado se a navegação estiver visível
+        const navigation = document.querySelector(".navigation");
+        const isNavigationVisible =
+          navigation.classList.contains("show") &&
+          !navigation.classList.contains("hidden");
+
+        if (isNavigationVisible) {
+          if (event.key === "ArrowRight" || event.key === " ") {
+            event.preventDefault();
+            nextSlide();
+          } else if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            prevSlide();
+          }
+        }
+      });
+
+      // Inicializar
+      showSlide(0);
+    </script>
+  </body>
 </html>
