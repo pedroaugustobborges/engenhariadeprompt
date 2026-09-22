@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(node:*)",
+      "Bash(powershell.exe -Command \"Write-Output 'ok'\")",
+      "Bash(cmd /c \"echo ok\")"
+    ]
+  }
+}
