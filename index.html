@@ -610,6 +610,38 @@ dialog[open] { animation: pop 0.22s ease-out; }
 .prizes span { animation: hop 2.2s ease-in-out infinite; }
 .prizes span:nth-child(2) { animation-delay: 0.3s; }
 .prizes span:nth-child(3) { animation-delay: 0.6s; }
+
+/* ── Raffle QR layout ── */
+.raffle-qr { max-width: 100%; padding: clamp(1.6rem, 4vw, 3rem); }
+.raffle-qr-layout { display: flex; align-items: center; gap: clamp(1.6rem, 4vw, 3.5rem); }
+.raffle-qr-left { flex: 1; text-align: center; }
+.raffle-qr-left .big { font-size: clamp(2.2rem, 5vw, 4rem); }
+.raffle-qr-left p { font-size: clamp(1rem, 2vw, 1.5rem); margin: .5rem 0; }
+.raffle-qr-left .btn { font-size: clamp(1.1rem, 2vw, 1.6rem); padding: .75em 1.4em; margin-top: 1.2rem; }
+.raffle-qr-divider {
+  width: 2px; align-self: stretch; min-height: 160px;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,.55) 30%, rgba(255,255,255,.55) 70%, transparent);
+  border-radius: 2px; flex-shrink: 0;
+}
+.raffle-qr-right { display: flex; flex-direction: column; align-items: center; gap: .9rem; flex-shrink: 0; }
+.qr-frame {
+  position: relative; padding: 8px;
+  background: #fff; border-radius: 16px;
+  box-shadow: 0 0 0 4px #ffd35a, 0 8px 32px rgba(0,0,0,.4);
+}
+.qr-img { display: block; width: clamp(160px, 22vw, 260px); height: auto; border-radius: 10px; }
+/* animated corner brackets */
+.qr-corner {
+  position: absolute; width: 24px; height: 24px;
+  border-color: #ffd35a; border-style: solid;
+  border-radius: 3px;
+}
+.qr-tl { top: -5px; left: -5px; border-width: 4px 0 0 4px; }
+.qr-tr { top: -5px; right: -5px; border-width: 4px 4px 0 0; }
+.qr-bl { bottom: -5px; left: -5px; border-width: 0 0 4px 4px; }
+.qr-br { bottom: -5px; right: -5px; border-width: 0 4px 4px 0; }
+.qr-label { font-size: clamp(.9rem, 1.6vw, 1.2rem); color: #fff5d6; line-height: 1.5; text-align: center; font-weight: 700; text-shadow: 0 1px 4px rgba(0,0,0,.3); }
+.prizes-lg { font-size: clamp(3rem, 6vw, 5rem); margin-top: 1.6rem; }
 @keyframes hop { 0%, 60%, 100% { transform: none; } 30% { transform: translateY(-12px); } }
 
 /* Neural net */
@@ -1065,14 +1097,29 @@ A =</pre>
 </section>
 
 <section class="slide" data-chapter="Por dentro do modelo" data-title="Sortear uma rifa">
-  <div class="frame narrow">
+  <div class="frame">
     <h2 class="title center" style="margin-inline:auto">🎟️ Sortear uma rifa</h2>
-    <div class="raffle">
-      <div class="big">Participe do sorteio!</div>
-      <p>🎊 Um prêmio especial te aguarda 🎊</p>
-      <a class="btn" href="https://chat.openai.com/" target="_blank" rel="noopener">🎯 Escolha um número de 1 a 30</a>
+    <div class="raffle raffle-qr">
+      <div class="raffle-qr-layout">
+        <div class="raffle-qr-left">
+          <div class="big">Participe do sorteio!</div>
+          <p>🎊 Um prêmio especial te aguarda 🎊</p>
+          <a class="btn" href="https://chat.openai.com/" target="_blank" rel="noopener">🎯 Escolha um número de 1 a 30</a>
+        </div>
+        <div class="raffle-qr-divider" aria-hidden="true"></div>
+        <div class="raffle-qr-right">
+          <div class="qr-frame">
+            <div class="qr-corner qr-tl"></div>
+            <div class="qr-corner qr-tr"></div>
+            <div class="qr-corner qr-bl"></div>
+            <div class="qr-corner qr-br"></div>
+            <img src="qrcode-sorteio.jpeg" alt="QR Code para participar do sorteio" class="qr-img" />
+          </div>
+          <p class="qr-label">📱 Aponte a câmera<br>e participe!</p>
+        </div>
+      </div>
     </div>
-    <div class="prizes" aria-hidden="true"><span>🏆</span><span>💰</span><span>🎁</span></div>
+    <div class="prizes prizes-lg" aria-hidden="true"><span>🏆</span><span>💰</span><span>🎁</span></div>
   </div>
 </section>
 
